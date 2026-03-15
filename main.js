@@ -1,55 +1,79 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const numberContainer = document.querySelector('.lotto-numbers');
-    const generateBtn = document.getElementById('generate-btn');
-    const themeToggle = document.getElementById('theme-toggle');
-    const body = document.body;
+const generateBtn = document.getElementById("generate-btn");
+const numberContainer = document.querySelector(".number-container");
+const darkModeToggle = document.getElementById("dark-mode-toggle");
+const body = document.body;
 
-    // Theme Toggle Logic
-    const currentTheme = localStorage.getItem('theme');
-    if (currentTheme === 'dark') {
-        body.classList.add('dark-mode');
-        themeToggle.textContent = '☀️';
+function generateNumbers() {
+    const numbers = new Set();
+    while (numbers.size < 6) {
+        const randomNumber = Math.floor(Math.random() * 45) + 1;
+        numbers.add(randomNumber);
     }
+    const sortedNumbers = Array.from(numbers).sort((a, b) => a - b);
+    localStorage.setItem("lottoNumbers", JSON.stringify(sortedNumbers));
+    return sortedNumbers;
+}
 
-    themeToggle.addEventListener('click', () => {
-        body.classList.toggle('dark-mode');
-        const isDark = body.classList.contains('dark-mode');
-        localStorage.setItem('theme', isDark ? 'dark' : 'light');
-        themeToggle.textContent = isDark ? '☀️' : '🌙';
+function displayNumbers(numbers) {
+    numberContainer.innerHTML = "";
+    numbers.forEach(number => {
+        const numberElement = document.createElement("div");
+        numberElement.classList.add("number");
+        numberElement.textContent = number;
+        numberContainer.appendChild(numberElement);
     });
+}
 
-    // Function to get a color based on the number
-    function getColor(number) {
-        if (number <= 10) return '#f8d7da'; // 연한 빨간색 계열
-        if (number <= 20) return '#d4edda'; // 연한 녹색 계열
-        if (number <= 30) return '#cce5ff'; // 연한 파란색 계열
-        if (number <= 40) return '#fff3cd'; // 연한 노란색 계열
-        return '#e2e3e5'; // 연한 회색 계열
-    }
-
-    const generateNumbers = () => {
-        numberContainer.innerHTML = ''; // Clear previous numbers
-        const numbers = new Set();
-        while (numbers.size < 6) {
-            numbers.add(Math.floor(Math.random() * 45) + 1);
-        }
-
-        const sortedNumbers = Array.from(numbers).sort((a, b) => a - b);
-
-        sortedNumbers.forEach((number, index) => {
-            setTimeout(() => {
-                const span = document.createElement('span');
-                span.textContent = number;
-                span.style.backgroundColor = getColor(number);
-                span.style.color = '#333'; // Numbers always look better with dark text on light backgrounds
-                span.style.boxShadow = `0 4px 15px rgba(0, 0, 0, 0.1)`;
-                numberContainer.appendChild(span);
-            }, index * 200); // Stagger the animation
-        });
-    };
-
-    generateBtn.addEventListener('click', generateNumbers);
-
-    // Generate numbers on initial load
-    generateNumbers();
+generateBtn.addEventListener("click", () => {
+    const numbers = generateNumbers();
+    displayNumbers(numbers);
 });
+
+darkModeToggle.addEventListener("change", () => {
+    body.classList.toggle("dark-mode");
+});
+
+window.addEventListener('load', () => {
+    const savedNumbers = localStorage.getItem("lottoNumbers");
+    if (savedNumbers) {
+        displayNumbers(JSON.parse(savedNumbers));
+    } else {
+        const numbers = generateNumbers();
+        displayNumbers(numbers);
+    }
+});
+
+// Formspree AJAX handling
+const form = document.getElementById("contact-form");
+const status = document.getElementById("form-status");
+
+async function handleSubmit(event) {
+    event.preventDefault();
+    const data = new FormData(event.target);
+    fetch(event.target.action, {
+        method: form.method,
+        body: data,
+        headers: {
+            'Accept': 'application/json'
+        }
+    }).then(response => {
+        if (response.ok) {
+            status.innerHTML = "문의가 성공적으로 전송되었습니다!";
+            status.classList.add("success");
+            form.reset();
+        } else {
+            response.json().then(data => {
+                if (Object.hasOwn(data, 'errors')) {
+                    status.innerHTML = data["errors"].map(error => error["message"]).join(", ");
+                } else {
+                    status.innerHTML = "전송 중 오류가 발생했습니다.";
+                }
+                status.classList.add("error");
+            });
+        }
+    }).catch(error => {
+        status.innerHTML = "전송 중 오류가 발생했습니다.";
+        status.classList.add("error");
+    });
+}
+form.addEventListener("submit", handleSubmit);

@@ -1,111 +1,155 @@
-@import url('https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap');
-
-:root {
-    --bg-color: #f0f2f5;
-    --bg-gradient: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-    --container-bg: #ffffff;
-    --text-color: #333;
-    --shadow-color: rgba(0, 0, 0, 0.1);
-}
-
-body.dark-mode {
-    --bg-color: #1a1a1a;
-    --bg-gradient: linear-gradient(135deg, #2c3e50 0%, #000000 100%);
-    --container-bg: #2d2d2d;
-    --text-color: #f0f2f5;
-    --shadow-color: rgba(0, 0, 0, 0.5);
-}
-
 body {
-    font-family: 'Nanum Pen Script', cursive;
+    font-family: sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
     margin: 0;
-    background: var(--bg-color);
-    background-image: var(--bg-gradient);
-    color: var(--text-color);
-    transition: background 0.3s ease, color 0.3s ease;
+    background-color: #f0f0f0;
+    transition: background-color 0.5s, color 0.5s;
 }
 
-.container {
+.main-container {
     text-align: center;
-    padding: 40px;
-    border-radius: 15px;
-    background-color: var(--container-bg);
-    box-shadow: 0 10px 30px var(--shadow-color);
-    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.container:hover {
-    transform: translateY(-5px);
-}
-
-h1 {
-    font-size: 3rem;
-    color: var(--text-color);
-    margin-bottom: 30px;
-}
-
-.lotto-numbers {
+.number-container {
     display: flex;
     justify-content: center;
-    gap: 15px;
-    margin-bottom: 40px;
+    gap: 10px;
+    margin-top: 1rem;
 }
 
-.lotto-numbers span {
+.number {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #eee;
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    background-color: #ff9a9e;
-    color: white;
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     font-weight: bold;
-    box-shadow: 0 4px 15px rgba(255, 154, 158, 0.5);
-    transition: all 0.3s ease;
 }
 
 #generate-btn {
-    font-family: 'Nanum Pen Script', cursive;
-    font-size: 1.5rem;
-    padding: 15px 30px;
+    margin-top: 1.5rem;
+    padding: 10px 20px;
+    font-size: 1rem;
     border: none;
-    border-radius: 10px;
-    background-color: #a1c4fd;
+    border-radius: 5px;
+    background-color: #4CAF50;
     color: white;
     cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(161, 196, 253, 0.5);
-}
-
-#theme-toggle {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    padding: 10px;
-    border: none;
-    background: none;
-    font-size: 1.5rem;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-}
-
-#theme-toggle:hover {
-    transform: scale(1.2);
+    transition: background-color 0.3s;
 }
 
 #generate-btn:hover {
-    background-color: #8ab4f8;
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(161, 196, 253, 0.7);
+    background-color: #45a049;
 }
 
-#generate-btn:active {
-    transform: translateY(-1px);
-    box-shadow: 0 3px 10px rgba(161, 196, 253, 0.5);
+/* Dark Mode */
+body.dark-mode {
+    background-color: #333;
+    color: #fff;
+}
+
+.dark-mode .main-container {
+    background-color: #444;
+}
+
+.dark-mode .number {
+    background-color: #555;
+}
+
+.dark-mode #generate-btn, .dark-mode #submit-btn {
+    background-color: #555;
+}
+
+.dark-mode #generate-btn:hover, .dark-mode #submit-btn:hover {
+    background-color: #666;
+}
+
+.dark-mode .contact-section input, .dark-mode .contact-section textarea {
+    background-color: #555;
+    border-color: #666;
+    color: #fff;
+}
+
+hr {
+    margin: 2rem 0;
+    border: none;
+    border-top: 1px solid #eee;
+}
+
+.dark-mode hr {
+    border-top: 1px solid #555;
+}
+
+.contact-section {
+    text-align: left;
+    margin-top: 1rem;
+}
+
+.contact-section h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.form-group input, .form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-family: inherit;
+}
+
+.form-group textarea {
+    height: 100px;
+    resize: vertical;
+}
+
+#submit-btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    background-color: #2196F3;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#submit-btn:hover {
+    background-color: #1e88e5;
+}
+
+#form-status {
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+}
+
+#form-status.success {
+    color: #4CAF50;
+}
+
+#form-status.error {
+    color: #f44336;
 }
